@@ -42,6 +42,13 @@ app.post("/render", { schema: renderSchema }, async (request, reply) => {
 
 const start = async () => {
   const { HOST, PORT } = process.env;
+  const shutdown = async () => {
+    await app.close();
+    process.exit(0);
+  }
+
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
 
   try {
     await app.listen({
